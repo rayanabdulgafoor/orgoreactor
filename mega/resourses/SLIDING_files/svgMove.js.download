@@ -1,0 +1,459 @@
+/*~ 
+ //移动物件
+ //对于每个要移动的目标:
+ 如果是g则遍历子元素，子元素是下面几种的按下面的处理，子元素是g再递归，没有下面几种子元素也没g子元素的将被忽略
+ 如果是svg, rect就设置x，y值
+ 如果是circle, ellipse就设置cx，cy值
+ 如果是line就设置x1，y1, x2, y2值
+ 如果是polyline, polygon就设置points值里的每对坐标
+ 如果是path则设置其路径数据"d"属性中的大写指令数据(绝对定位的指令数据)
+ */
+var SVGMove = {
+	move: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		SVGMove[e.tagName](e, x, y);
+	},
+	g: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		//如果是有引脚的元件，要跟踪每个引脚的焦点
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		//如果是内电层的区块则取消移动
+		if (e && attr(e, 'c_partid') === 'part_plane') {
+			return;
+		}
+
+		var nodes = e.children, n = nodes.length;
+
+		for (var i = 0; i < n; i++) {
+			if (own(SVGMove,nodes[i].tagName)) {
+				SVGMove[nodes[i].tagName](nodes[i], x, y);
+			}
+		}
+
+		//如果是元件，要同步更新c_origin属性
+		var c_origin = attr(e, 'c_origin');
+		if (c_origin) {
+			c_origin = numberlistToArray(c_origin);
+			c_origin[0] = toFixed(c_origin[0] + x, 4);
+			c_origin[1] = toFixed(c_origin[1] + y, 4);
+			attr(e, 'c_origin', c_origin.join(','));
+		}
+	},
+	svg: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		//myDebug.info('SVGMove x:'+x+', y:'+y);
+		//myDebug.info('   before x:'+attr(e,'x')+', y:'+attr(e,'y'));
+		if (x !== 0) {
+			attr(e, {x: +(attr(e, 'x') || 0) + x});
+		}
+		if (y !== 0) {
+			attr(e, {y: +(attr(e, 'y') || 0) + y});
+		}
+		//myDebug.info('   after x:'+attr(e,'x')+', y:'+attr(e,'y'));
+	},
+	rect: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		SVGMove.svg(e, x, y);
+	},
+	text: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		var x0 = +(attr(e, 'x') || 0), y0 = +(attr(e, 'y') || 0);
+		var ts = attr(e, 'transform') || '', tsm;
+		if (ts && (tsm = ts.match(/rotate\((-?[\d.]+)[,\s].+\)/))) {
+			attr(e, {x: x0 + x, y: y0 + y, transform: 'rotate(' + tsm[1] + ',' + (x0 + x) + ',' + (y0 + y) + ')'});
+		} else {
+			attr(e, {x: x0 + x, y: y0 + y});
+		}
+		var tspans = $$$('tspan', e), n = tspans.length;
+		for (var i = 0; i < n; i++) {
+			attr(tspans[i], {x: x0 + x});
+		}
+	},
+	image: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		var x0 = +(attr(e, 'x') || 0),
+			y0 = +(attr(e, 'y') || 0),
+			w = +attr(e, 'width'),
+			h = +attr(e, 'height'),
+			angle = getRotateAngle(e);
+		attr(e, {x: x0 + x, y: y0 + y});
+		if (angle) {
+			var rect = {x: x0 + x, y: y0 + y, width: w, height: h};
+			attr(e, 'transform', getHangRotateTransform(rect, angle));
+		}
+	},
+	circle: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		attr(e, {
+			cx: +attr(e, 'cx') + x,
+			cy: +attr(e, 'cy') + y
+		});
+	},
+	ellipse: function (e, x, y) {
+		SVGMove.circle(e, x, y);
+	},
+	line: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		attr(e, {
+			x1: +attr(e, 'x1') + x,
+			x2: +attr(e, 'x2') + x,
+			y1: +attr(e, 'y1') + y,
+			y2: +attr(e, 'y2') + y
+		});
+	},
+	polyline: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		var arr = trim(attr(e, 'points')).split(/[\s\,]+/g);
+		for (var i = 0; i < arr.length - 1; i += 2) {
+			arr[i] = toFixed(+arr[i] + x, 4);
+			arr[i + 1] = toFixed(+arr[i + 1] + y, 4);
+		}
+		attr(e, {'points': arr.join(' ')});
+	},
+	polygon: function (e, x, y) {
+		SVGMove.polyline(e, x, y);
+	},
+	path: function (e, x, y) {
+		if (!isFinite(x)) {
+			x = 0;
+		}
+		if (!isFinite(y)) {
+			y = 0;
+		}
+		if (!e || (x === 0 && y === 0)) {
+			return;
+		}
+		//Opera bug: after read pathSegList property, the d attribute will be changed, the [HhVv] command will disappear from d string. Need to fix the d attribute later.
+		//see also:
+		//     Bug 30219 - SVG Path elements are not correctly updated through pathSegList manipulation on relative values
+		//     https://bugs.webkit.org/show_bug.cgi?id=30219
+		if (isOpera) {
+			//var needFixD = attr(e,'d').search(/[HhVvAa]/)>=0;
+			var needFixD = true;
+		}
+		//路径节点多的时候(比如插入的图片)，DOM接口操作极慢，导致移动极慢, 改为PathData后性能提升极其明显。(页面已引入path-data-polyfill.js)
+		//(svg-edit是先将路径全部转为相对坐标然后只需要处理头部的M)
+		//这里路径处理为保留2位小数
+		(function (addx, addy) {
+			function adjust(vs, i, add) {
+				vs[i] = toFixed(vs[i] + add, 4);
+			}
+
+			var pd = e.getPathData(), n = pd.length;
+			for (var i = 0; i < n; i++) {
+				var seg = pd[i], letter = seg.type, vs = seg.values;
+				switch (letter) {
+					case 'M':
+					case 'L':
+					case 'T':
+						//vs[0] += addx; vs[1] += addy;
+						adjust(vs, 0, addx);
+						adjust(vs, 1, addy);
+						break;
+					case 'H':
+						adjust(vs, 0, addx); //vs[0] += addx;
+						break;
+					case 'V':
+						adjust(vs, 0, addy); //vs[0] += addy;
+						break;
+					case 'C':
+						//vs[0] += addx; vs[1] += addy;
+						//vs[2] += addx; vs[3] += addy;
+						//vs[4] += addx; vs[5] += addy;
+						adjust(vs, 0, addx);
+						adjust(vs, 1, addy);
+						adjust(vs, 2, addx);
+						adjust(vs, 3, addy);
+						adjust(vs, 4, addx);
+						adjust(vs, 5, addy);
+						break;
+					case 'S':
+					case 'Q':
+						//vs[0] += addx; vs[1] += addy;
+						//vs[2] += addx; vs[3] += addy;
+						adjust(vs, 0, addx);
+						adjust(vs, 1, addy);
+						adjust(vs, 2, addx);
+						adjust(vs, 3, addy);
+						break;
+					case 'A':
+						//vs[5] += addx; vs[6] += addy;
+						adjust(vs, 5, addx);
+						adjust(vs, 6, addy);
+						break;
+					default :
+						break;
+				}
+			}
+			e.setPathData(pd);
+		}(x, y));
+	}
+};
+
+//utils
+
+function attr(e, ps, pv) {
+	if (!e) {
+		return null;
+	}
+	var argsCount = arguments.length;
+	var p, n, pn, i;
+	if (e.tagName) {
+		if (typeof ps == 'string') {
+			if (argsCount === 2) {
+				return e.getAttribute(ps);
+			} else {
+				if (ps.indexOf(':') > 0) {
+					n = ps.substr(0, ps.indexOf(':'));
+					if (n in NS) {
+						pn = ps.substr(n.length + 1);
+						if (isChrome) {
+							e.setAttributeNS(NS[n], ps, pv);
+						} else {
+							e.setAttributeNS(NS[n], pn, pv);
+						}
+					}
+				} else {
+					e.setAttribute(ps, pv);
+					if (pv === '' || pv === null || pv === undefined) {
+						if (ps === 'transform') {
+							//bug: e.removeAttribute('transform') cannot remove the transform effect except e.setAttribute('transform',''), test Firefox 7.0
+							e.setAttribute(ps, '');
+						}
+						e.removeAttribute(ps);
+					}
+				}
+				return e;
+			}
+		}
+		for (p in ps) {
+			if (own(ps, p)) {
+				if (p.indexOf(':') > 0) {
+					n = p.substr(0, p.indexOf(':'));
+					if (n in NS) {
+						pn = p.substr(n.length + 1);
+						if (ps[p] === '') {
+							if (e.hasAttributeNS(NS[n], pn)) {
+								e.removeAttributeNS(NS[n], pn);
+							}
+						} else {
+							if (isChrome) {
+								e.setAttributeNS(NS[n], p, ps[p]);
+							} else {
+								e.setAttributeNS(NS[n], pn, ps[p]);
+							}
+						}
+					}
+				} else {
+					if (ps[p] === '') {
+						if (e.hasAttribute(p)) {
+							if (p === 'transform') {
+								//bug: e.removeAttribute('transform') cannot remove the transform effect except e.setAttribute('transform',''), test Firefox 7.0
+								e.setAttribute(p, '');
+							}
+							e.removeAttribute(p);
+						}
+					} else {
+						e.setAttribute(p, ps[p]);
+					}
+				}
+			}
+		}
+		return e;
+	}
+	if (Array.isArray(e) || e instanceof NodeList || e instanceof HTMLCollection || (isOpera && typeof e.length === "number")) { //Array or NodeList
+		if (typeof ps == 'string' && argsCount == 2) {
+			return e[0] ? attr(e[0], ps) : null;
+		}
+		if (argsCount == 2) {
+			for (i = 0; i < e.length; i++) {
+				attr(e[i], ps);
+			}
+		} else if (argsCount >= 3) {
+			for (i = 0; i < e.length; i++) {
+				attr(e[i], ps, pv);
+			}
+		}
+		return e;
+	}
+}
+
+function own(obj, key) {
+	return obj ? obj.hasOwnProperty(key) : false;
+}
+
+function trim(s) {
+	if (!s) {
+		return '';
+	}
+	return s.trim ? s.trim() : s.replace(/^\s+|\s+$/g, '');
+}
+
+
+function toFixed(x, n, fixedDecimal) {
+	if (typeof x !== 'number') {
+		x = +x; //parseFloat(x);
+	}
+	if (isNaN(x)) {
+		return NaN;
+	}
+	n = n | 0;
+	if (n <= 0 || (!x && !fixedDecimal)) {
+		return Math.round(x);
+	}
+	var p = Pow10[n] || Math.pow(10, n) || 10;
+	if (fixedDecimal) {
+		var sign = x < 0 ? '-' : '';
+		x = x < 0 ? -x : x;
+		x = Math.round(x * p) + '';
+		while (x.length <= n) {
+			x = '0' + x;
+		}
+		x = x.slice(0, -n) + '.' + x.slice(-n);
+		return (sign + x);
+	} else {
+		//这里在round之前有加一个非常小的小数
+		// 1.23985 * 10000 结果是 12398.499999999998，再round会变成12398而不是预期的12399，所以加上微小修正值
+		return Math.round(x * p + 1e-10) / p;
+	}
+};
+
+function uaIndexOf(s) {
+	return navigator.userAgent.indexOf(s);
+}
+
+function numberlistToArray(str, sp) {
+	if (!str) {
+		return [];
+	}
+	var arr = str.trim().split(sp || /[\s,]+/g), i;
+	for (i = 0; i < arr.length; i++) {
+		arr[i] = +arr[i];
+	}
+	return arr;
+};
+
+function $$$(selector, scope) {
+	//从js error日志得知，这里存在querySelectorAll is not a function的错误，因此加判断保险
+	if (!selector || selector == '#') {
+		return [];
+	}
+	try {
+		return (scope || document).querySelectorAll(selector);
+	} catch (err) {
+		return [];
+	}
+}
+
+//返回最接近正方形的排列方式
+function getSquareRowCol(num,width,height,spacing){
+	spacing = spacing || 0;
+    var prop = 0,prop2 = 0,row = 1,col = 1;
+    var abs1,abs2;
+    var rc = {
+        row: 1,
+        col: num,
+        width: 0,
+        height: 0
+    };
+    for(var i = 1;i <= num;i++){
+        row = i;
+        col = 1;
+        while(row * col < num){
+            col++;
+        }
+        if(i === 1){
+            prop = (col*width + (rc.col-1)*spacing) / (row*height + (rc.row-1)*spacing);
+            abs1 = Math.abs(prop - 1);
+            rc.row = row;
+            rc.col = col;
+        }else{
+            prop2  = (col*width + (rc.col-1)*spacing) / (row*height + (rc.row-1)*spacing);
+            abs2 = Math.abs(prop2 - 1);
+            if(abs2 < abs1){
+                prop = prop2;
+                rc.row = row;
+                rc.col = col;
+                abs1 = abs2;
+            }
+        }
+    }
+    rc.width = rc.col * width + (rc.col-1)*spacing;
+    rc.height = rc.row * height + (rc.row-1)*spacing;
+    return rc;
+}
+
+//全局变量
+var Pow10 = [1, 10, 100, 1000];
+var isOpera = uaIndexOf('Opera/') === 0;

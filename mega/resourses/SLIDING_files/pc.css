@@ -1,0 +1,4 @@
+html {
+  overflow: auto !important;
+  min-width: 1200px;
+}

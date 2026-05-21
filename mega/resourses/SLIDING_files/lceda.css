@@ -1,0 +1,219 @@
+#lcedalogo{
+	margin: 0 auto;
+	width: 94%;
+	height: 52px;
+	background-color: #e3e9f1;
+	border-radius: 8px;
+	/*修改部分*/
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	box-sizing: border-box;
+}
+
+#lcedalogo svg{
+	margin-top: 15px;
+	margin-left: 30px;
+}
+
+#lcedalogo div{
+	font-size: 13px;
+	margin-left: 25px;
+}
+
+div.lcedaCanvas{
+	border: 1px solid #d9d9d9;
+	width: 46%;
+	height: 366px;
+	display: inline-block;
+	margin-right: 10px;
+	margin-top: 20px;
+}
+
+div.requestDesign{
+	text-align: center;
+	margin-top: 158px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#schCanvas{
+	margin-left: 3%;
+}
+div.canvasBorder{
+	margin-top:0px;
+	width: 366px;
+	height:auto;
+}
+
+#userButton{
+	margin: 0 auto;
+	background-color: #fa7701;
+	font-size: 14px;
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 10px;
+	width: 138px;
+	/*height: 27px;*/
+	border-radius: 8px;
+	padding: 8px;
+	cursor: pointer;
+}
+#userButton a, #userButton a:hover{
+	color: #fff;
+}
+
+.hint_down{
+	left: 41%;
+	top: 32%;
+	width: 800px;
+	height: 670px;
+}
+
+#rootControl{
+	position: absolute;
+	bottom: 10%;
+	left: 40.5%;
+}
+#rootControl2{
+	position: absolute;
+	bottom: 10%;
+	right: 4%;
+}
+
+#rootControl span,#rootControl2 span{
+	cursor: pointer;
+}
+
+/*pcb.css*/
+*[layerid='0']:not([c_para]){stroke:#FFF;}
+*[layerid='1']:not([c_para]){stroke:#FF0000;fill:#FF0000;}
+*[layerid='2']:not([c_para]){stroke:#0000FF;fill:#0000FF;}
+*[layerid='3']:not([c_para]){stroke:#FFFF00;fill:#FFFF00;}
+*[layerid='4']:not([c_para]){stroke:#808000;fill:#808000;}
+*[layerid='5']:not([c_para]){stroke:#808080;fill:#808080;}
+*[layerid='6']:not([c_para]){stroke:#800000;fill:#800000;}
+*[layerid='7']:not([c_para]){stroke:#800080;fill:#800080;}
+*[layerid='8']:not([c_para]){stroke:#AA00FF;fill:#AA00FF;}
+*[layerid='9']:not([c_para]){stroke:#6464FF;fill:#6464FF;}
+*[layerid='10']:not([c_para]){stroke:#FF00FF;fill:#FF00FF;}
+*[layerid='11']:not([c_para]){stroke:rgb(96,96,96);fill:rgb(96,96,96);}
+*[layerid='12']:not([c_para]){stroke:#FFFFFF;fill:#FFFFFF;}
+*[layerid='13']:not([c_para]){stroke:#FFF;}
+*[layerid='14']:not([c_para]){stroke:#FFF;}
+*[layerid='15']:not([c_para]){stroke:#FFF;}
+*[layerid='16']:not([c_para]){stroke:#FFF;}
+*[layerid='17']:not([c_para]){stroke:#FFF;}
+*[layerid='18']:not([c_para]){stroke:#FFF;}
+*[layerid='19']:not([c_para]){stroke:#FFF;}
+*[layerid='20']:not([c_para]){stroke:#FFF;}
+*[layerid='21']:not([c_para]){stroke:#800000;fill:#800000;}
+*[layerid='22']:not([c_para]){stroke:#008000;fill:#008000;}
+*[layerid='23']:not([c_para]){stroke:#00FF00;fill:#00FF00;}
+*[layerid='24']:not([c_para]){stroke:#000080;fill:#000080;}
+*[layerid="43"]:not([c_para]){stroke:#39503F;fill:#39503F;}
+*[layerid="44"]:not([c_para]){stroke:#0C715D;fill:#0C715D;}
+*[layerid="45"]:not([c_para]){stroke:#5A8A80;fill:#5A8A80;}
+*[layerid="46"]:not([c_para]){stroke:#2B937E;fill:#2B937E;}
+*[layerid="47"]:not([c_para]){stroke:#23999D;fill:#23999D;}
+*[layerid="48"]:not([c_para]){stroke:#45B4E3;fill:#45B4E3;}
+*[layerid="49"]:not([c_para]){stroke:#215DA1;fill:#215DA1;}
+*[layerid="50"]:not([c_para]){stroke:#4564D7;fill:#4564D7;}
+*[layerid="51"]:not([c_para]){stroke:#6969E9;fill:#6969E9;}
+*[layerid="52"]:not([c_para]){stroke:#9069E9;fill:#9069E9;}
+
+*[fill="none"] {fill: none;}
+*[stroke="none"] {stroke: none;}
+#g12 path, #g12 polyline,#g12 polygon, #g12 line {stroke-linecap:round;}
+*[fill="none"]:not([c_para]) {fill: none;}
+*[stroke="none"]:not([c_para]) {stroke: none;}
+#g12 g[c_partid="part_pad"]{display: initial}
+#g12 line[c_shapetype="line"]{stroke-width:1;}
+
+#root2 #g12 g[c_partid="part_pad"] > * + circle, #gCurParts g[c_partid="part_pad"] > * + circle {fill: rgb(34,34,34);}  /* inner hole of pad */
+#root2 #g12 g[c_partid="part_via"] > * + circle:nth-of-type(2), #gCurParts g[c_partid="part_via"] > * + circle:nth-of-type(2) {fill: rgb(34,34,34);}  /* via */
+#root2 #g12 g[c_partid="part_hole"] > * + circle, #gCurParts g[c_partid="part_hole"] > * + circle {fill: rgb(34,34,34);}  /* hole */
+#root2 #g12 g[c_partid="part_pad"] > polyline:nth-of-type(2), #gCurParts g[c_partid="part_pad"] > polyline:nth-of-type(2) {stroke: #000000;}  /* inner hole of pad */
+#root2 #g12 g[c_partid="part_pad"][c_shape="ELLIPSE"] > polyline:nth-last-of-type(1), #gCurParts g[c_partid="part_pad"] > polyline:nth-last-of-type(1) {stroke: #000000;}
+#root2 #g12 g[c_partid="part_pad"][c_shape="RECT"] > polyline:nth-last-of-type(1), #gCurParts g[c_partid="part_pad"] > polyline:nth-last-of-type(1) {stroke: #000000;}
+
+#root2 g[c_partid="part_pad"][layerid="1"] ellipse:not([c_padid]) {fill:#FF0000;}
+#root2 g[c_partid="part_pad"][layerid="1"]  polygon:not([c_padid]) {fill:#FF0000;}
+#root2 g[c_partid="part_pad"][layerid="1"]  polyline:not([c_padid]) {stroke:#FF0000;}
+#root2 g[c_partid="part_pad"][layerid="1"]  circle {fill:#FF0000;}
+#root2 g[c_partid="part_pad"][layerid="2"]  ellipse:not([c_padid]) {fill:#0000FF;}
+#root2 g[c_partid="part_pad"][layerid="2"]  polygon:not([c_padid]) {fill:#0000FF;}
+#root2 g[c_partid="part_pad"][layerid="2"]  polyline:not([c_padid]) {stroke:#0000FF;}
+#root2 g[c_partid="part_pad"][layerid="2"]  circle {fill:#0000FF;}
+#root2 g[c_partid="part_pad"][layerid="11"]  ellipse:not([c_padid]) {fill:#C0C0C0;}
+#root2 g[c_partid="part_pad"][layerid="11"]  polygon:not([c_padid]) {fill:#C0C0C0;}
+#root2 g[c_partid="part_pad"][layerid="11"]  polyline:not([c_padid]) {stroke:#C0C0C0;}
+#root2 g[c_partid="part_pad"][layerid="11"]  circle {fill:#C0C0C0;}
+#root2 g[c_partid="part_pad"][layerid] > circle[c_padhole] {fill: #000000;}
+#root2 g[c_partid="part_pad"][layerid] > polyline[c_padhole] {stroke:#000000;}
+#root2 g[c_partid="part_via"][layerid] > * + circle {fill: #000000;}
+#root2 g[c_partid="part_pad"] > polygon[c_padid] {stroke-linejoin: miter;stroke-miterlimit: 100;}
+#root2 g[c_partid="part_hole"] > circle {fill: #c0c0c0;}path, polyline, polygon {stroke-linejoin:round;}
+#g12 circle, #g12 ellipse, #g12 polyline, #g12 line, #g12 polygon, #g12 path {shape-rendering:crispEdges;}
+
+#g12 [stroke-width="1"] {stroke-width:1;}
+.px1 {stroke-width:1}
+
+/*pcb.css*/
+/*sch.css*/
+
+/*sch.css*/
+
+/*font.css*/
+#rootControl .control{
+	font-size: 20px;
+	color: #239be4;
+}
+
+#rootControl2 .control{
+	font-size: 19px;
+	color: #fff;
+}
+
+#hint_down{
+    -moz-user-select:none;/*火狐*/
+    -webkit-user-select:none;/*webkit浏览器*/
+    -ms-user-select:none;/*IE10*/
+    -khtml-user-select:none;/*早期浏览器*/
+    user-select:none;
+}
+
+
+#g12 .hover:not([fill]), #g12 .hover *:not([fill]), #g12 .active:not([fill]), #g12 .active *:not([fill]), #g12 .selected:not([fill]), #g12 .selected *:not([fill]) {fill: #223;fill-opacity:0.6;}
+#g12 .hover:not([stroke]), #g12 .hover *:not([stroke]), #g12 .active:not([stroke]), #g12 .active *:not([stroke]), #g12 .selected:not([stroke]), #g12 .selected *:not([stroke]) {stroke:#fff;stroke-opacity:0.6;}
+#g12 g[c_partid="part_pad"]:hover > *:not([fill]), #g12 g[c_partid="part_pad"].active > *:not([fill]) {fill:#222;}
+#g12 g[c_partid="part_pad"]:hover > *:not([stroke]), #g12 g[c_partid="part_pad"].active > *:not([stroke]) {stroke:#333;}
+#g12 g[c_partid="part_via"]:hover > *:not([fill]), #g12 g[c_partid="part_via"].active > *:not([fill]) {fill:#111;fill-opacity:1;}
+#g12 path[attachedcopperid] {pointer-events:none;}
+text.hover, .hover text, tspan.hover, .hover tspan {stroke:none;fill:#fff;}
+
+#root2 g[c_partid="part_pad"]:hover[layerid="1"]  polyline:not([c_padid]) {stroke:#fff;}
+#root2 g[c_partid="part_pad"]:hover[layerid="1"]  ellipse:not([c_padid]) {fill:#fff;}
+#root2 g[c_partid="part_pad"]:hover[layerid="1"]  polygon:not([c_padid]) {fill:#fff;}
+#root2 g[c_partid="part_hole"]:hover  ellipse{stroke:#fff;}
+#root2 .active  polyline:not([c_padid]) {stroke:#fff;}
+#root2 .active  ellipse{stroke:#fff;}
+
+#root path, #root polyline, #root polygon {stroke-linejoin:round;stroke-linecap}
+#root rect,#root circle,#root ellipse,#root polyline,#root line,#root polygon,#root path {shape-rendering:initial;stroke-linecap:round;}
+
+#g1 circle.pindot{
+	fill: none;
+    stroke-opacity: .5;
+    stroke-width: 0.3;
+    stroke: #333;
+    shape-rendering: auto;
+}
+
+#gNets > text, #gNetsTextRuler {text-anchor:middle; font-family:Consolas, Courier, Monospace;}
+#gNets > text:not([fill]){fill:#fff;}
+#gNets > text:not(stroke){stroke:black;}
+
+
+
