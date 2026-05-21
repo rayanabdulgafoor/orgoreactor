@@ -6,7 +6,13 @@ Embedded photobioreactor system designed for automated cultivation control using
 
 ---
 
+## Full Project Documentation
 
+Detailed project documentation, system architecture, embedded workflows, and testing results are available here:
+
+[Portfolio Documentation](https://www.rayanabdulgafoor.in/projects/machines/orgoreactor/index.html)
+
+---
 
 ## Overview
 
