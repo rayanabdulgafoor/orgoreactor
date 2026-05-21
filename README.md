@@ -1,4 +1,4 @@
-# OrgoReactor – Photobioreactor Control System
+# OrgoReactor: Photobioreactor Control System
 
 Embedded photobioreactor system designed for automated cultivation control using integrated sensing, user interaction, and environmental regulation.
 
