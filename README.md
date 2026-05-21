@@ -66,6 +66,8 @@ The system enables users to configure operational parameters and monitor reactor
 
 ## PCB Design and Fabrication
 
+The PCB is designed in EasyEDA and fabricated from Lion Circuits. 
+
 ![schematice](/assets/Schematic-1.png)
 
 ![pcb](/assets/pcb.jpg)
